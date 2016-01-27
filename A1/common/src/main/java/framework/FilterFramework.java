@@ -128,7 +128,7 @@ public abstract class FilterFramework extends Thread {
         return inputFilters.get(key);
     }
 
-    class EndOfStreamException extends Exception {
+    public class EndOfStreamException extends Exception {
 
         static final long serialVersionUID = 0; // the version for streaming
 

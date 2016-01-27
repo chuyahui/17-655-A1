@@ -1,5 +1,8 @@
 package framework;
 
+import util.ConversionUtil;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public abstract class SplittingFilterTemplate extends FilterFramework {
     @Override
     protected void inputConnected(FilterFramework inputFilter) {
         super.inputConnected(inputFilter);
-        if (this.inputFilters.size() >= 1)
+        if (this.inputFilters.size() >= 1 && !this.inputFilters.keySet().contains(inputFilter.filterId))
             throw new RuntimeException("A splitting filter can only accept 1 connection");
         this.inputFilterId = inputFilter.filterId;
     }
@@ -42,26 +45,25 @@ public abstract class SplittingFilterTemplate extends FilterFramework {
         this.outputFilterIds.add(outputFilter.filterId);
     }
 
-    byte ReadFilterInputPort() throws EndOfStreamException {
+    protected byte ReadFilterInputPort() throws EndOfStreamException {
         return readFromInput(inputFilterId);
     }
 
-    void WriteFilterOutputPortOne(byte data) {
+    protected void WriteFilterOutputPortOne(byte data) {
         writeToOutput(data, outputFilterIds.get(0));
     }
 
-    void WriteFilterOutputPortTwo(byte data) {
+    protected void WriteFilterOutputPortTwo(byte data) {
         writeToOutput(data, outputFilterIds.get(1));
     }
 
-    private int readId() throws EndOfStreamException {
-        int id = 0;
+    private byte[] readId() throws EndOfStreamException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         for (int i = 0; i < context.getIdLength(); i++) {
-            id = id | (ReadFilterInputPort() & 0xFF);
-            if (i != context.getIdLength() - 1)
-                id = id << 8;
+            byte databyte = ReadFilterInputPort();
+            out.write(databyte);
         }
-        return id;
+        return out.toByteArray();
     }
 
     private byte[] readMeasurement(int length) throws EndOfStreamException {
@@ -72,16 +74,20 @@ public abstract class SplittingFilterTemplate extends FilterFramework {
         return measurement;
     }
 
-    protected abstract void routeMeasurement(int id, byte[] measurement);
+    protected abstract void routeMeasurement(byte[] id, byte[] measurement);
+
+    protected abstract void reachedEndOfStream();
 
     @Override
     public void run() {
         while (true) {
             try {
-                int id = readId();
+                byte[] idBytes = readId();
+                int id = ConversionUtil.convertToInt(idBytes);
                 byte[] measurement = readMeasurement(context.idForMeasurementLength(id));
-                routeMeasurement(id, measurement);
+                routeMeasurement(idBytes, measurement);
             } catch (EndOfStreamException ex) {
+                reachedEndOfStream();
                 closeAllPorts();
                 break;
             }

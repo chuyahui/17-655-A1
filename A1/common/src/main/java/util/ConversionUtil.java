@@ -1,10 +1,24 @@
 package util;
 
+import java.nio.ByteBuffer;
+
 /**
  * @author Weinan Qiu
  * @since 1.0.0
  */
 public class ConversionUtil {
+
+    public static byte[] convertToByteArray(double value) {
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putDouble(value);
+        return bytes;
+    }
+
+    public static byte[] convertToByteArray(int value) {
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putInt(value);
+        return bytes;
+    }
 
     public static int convertToInt(byte[] measurement) {
         int result = 0;
