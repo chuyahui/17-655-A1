@@ -1,0 +1,13 @@
+framework/FilterFramework$EndOfStreamException.class
+shared/DataDroppingFilter.class
+framework/MeasurementContext.class
+framework/SourceFilterTemplate.class
+framework/FilterFramework.class
+util/ConversionUtil.class
+framework/SplittingFilterTemplate.class
+framework/FilterTemplate.class
+shared/FileSourceFilter.class
+framework/PlumberTemplate.class
+framework/SinkFilterTemplate.class
+shared/FileSinkFilter.class
+shared/FormattingFilter.class
