@@ -1,4 +1,4 @@
-package system;
+package shared;
 
 import framework.FilterTemplate;
 import framework.MeasurementContext;
@@ -30,5 +30,13 @@ public class AltitudeConvertingFilter extends FilterTemplate {
         String formatted = new DecimalFormat(numberFormat).format(altitudeInMeter);
 
         return Arrays.copyOf(formatted.getBytes(), 13);
+    }
+
+    public String getNumberFormat() {
+        return numberFormat;
+    }
+
+    public void setNumberFormat(String numberFormat) {
+        this.numberFormat = numberFormat;
     }
 }

@@ -1,4 +1,4 @@
-package system;
+package shared;
 
 import framework.FilterTemplate;
 import framework.MeasurementContext;

@@ -2,10 +2,7 @@ package system;
 
 import framework.FilterFramework;
 import framework.MeasurementContext;
-import shared.DataDroppingFilter;
-import shared.FileSinkFilter;
-import shared.FileSourceFilter;
-import shared.FormattingFilter;
+import shared.*;
 
 /**
  * @author Weinan Qiu

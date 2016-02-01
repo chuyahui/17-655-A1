@@ -2,8 +2,9 @@ package system;
 
 import framework.FilterFramework;
 import framework.MeasurementContext;
-import shared.DataDroppingFilter;
-import shared.FileSourceFilter;
+import shared.*;
+
+import java.util.Arrays;
 
 /**
  * @author Weinan Qiu
@@ -16,19 +17,87 @@ public class SystemBPlumber {
         DataDroppingFilter droppingFilter = new DataDroppingFilter("1", MeasurementContext.defaultContext());
         droppingFilter.setDropAttitude(true);
         droppingFilter.setDropVelocity(true);
-        PressureValidityFilter splitFilter = new PressureValidityFilter("2", MeasurementContext.defaultContext());
-        DebugPrintToConsoleFilter invalidPrinter = new DebugPrintToConsoleFilter("3", MeasurementContext.defaultContext());
-        DebugPrintToConsoleFilter validPrinter = new DebugPrintToConsoleFilter("4", MeasurementContext.defaultContext());
 
-        invalidPrinter.connect(splitFilter);
-        validPrinter.connect(splitFilter);
+        PressureValidityFilter splitFilter = new PressureValidityFilter("2", MeasurementContext.defaultContext());
+
+        DataDroppingFilter invalidDroppingFilter = new DataDroppingFilter("3.1", MeasurementContext.defaultContext());
+        invalidDroppingFilter.setDropAttitude(true);
+        invalidDroppingFilter.setDropVelocity(true);
+        invalidDroppingFilter.setDropAltitude(true);
+        invalidDroppingFilter.setDropTemperature(true);
+        TimeConvertingFilter invalidTimeConvertingFilter = new TimeConvertingFilter("4.1", MeasurementContext.defaultContext());
+        PressureFormattingFilter invalidPressureFormattingFilter = new PressureFormattingFilter("5.1",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16));
+        FormattingFilter invalidFormattingFilter = new FormattingFilter("6.1",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16)
+                        .expectPressureWithLength(9));
+        invalidFormattingFilter.setTimeRequired(true);
+        invalidFormattingFilter.setPressureRequired(true);
+        FileSinkFilter invalidFileSink = new FileSinkFilter("7.1", "/Users/davidiamyou/Downloads/WildPoints.dat");
+
+        /********************************************************************
+         * Create filters for the valid stream
+         ********************************************************************/
+        TimeConvertingFilter validTimeConvertingFilter = new TimeConvertingFilter("3.2", MeasurementContext.defaultContext());
+        TemperatureConvertingFilter validTemperatureConvertingFilter = new TemperatureConvertingFilter("4.2",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16));
+        AltitudeConvertingFilter validAltitudeConvertingFilter = new AltitudeConvertingFilter("5.2",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16)
+                        .expectTemperatureWithLength(10));
+        PressureFormattingFilter validPressureFormattingFilter = new PressureFormattingFilter("6.2",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16)
+                        .expectTemperatureWithLength(10)
+                        .expectAltitudeWithLength(13));
+        FormattingFilter validFormattingFilter = new FormattingFilter("7.2",
+                MeasurementContext.defaultContext()
+                        .expectTimeWithLength(16)
+                        .expectTemperatureWithLength(10)
+                        .expectAltitudeWithLength(13)
+                        .expectPressureWithLength(9));
+        validFormattingFilter.setTimeRequired(true);
+        validFormattingFilter.setAltitudeRequired(true);
+        validFormattingFilter.setTemperatureRequired(true);
+        validFormattingFilter.setPressureRequired(true);
+        FileSinkFilter validFileSink = new FileSinkFilter("8.2", "/Users/davidiamyou/Downloads/OutputB.dat");
+
+        invalidFileSink.connect(invalidFormattingFilter);
+        invalidFormattingFilter.connect(invalidPressureFormattingFilter);
+        invalidPressureFormattingFilter.connect(invalidTimeConvertingFilter);
+        invalidTimeConvertingFilter.connect(invalidDroppingFilter);
+
+        validFileSink.connect(validFormattingFilter);
+        validFormattingFilter.connect(validPressureFormattingFilter);
+        validPressureFormattingFilter.connect(validAltitudeConvertingFilter);
+        validAltitudeConvertingFilter.connect(validTemperatureConvertingFilter);
+        validTemperatureConvertingFilter.connect(validTimeConvertingFilter);
+
+        invalidDroppingFilter.connect(splitFilter);
+        validTimeConvertingFilter.connect(splitFilter);
+
         splitFilter.connect(droppingFilter);
         droppingFilter.connect(fileSourceFilter);
 
-        fileSourceFilter.start();
-        droppingFilter.start();
-        splitFilter.start();
-        validPrinter.start();
-        invalidPrinter.start();
+        for (Thread filter : Arrays.asList(
+                fileSourceFilter,
+                droppingFilter,
+                splitFilter,
+                validTimeConvertingFilter,
+                validTemperatureConvertingFilter,
+                validAltitudeConvertingFilter,
+                validPressureFormattingFilter,
+                validFormattingFilter,
+                validFileSink,
+                invalidDroppingFilter,
+                invalidTimeConvertingFilter,
+                invalidPressureFormattingFilter,
+                invalidFormattingFilter,
+                invalidFileSink)) {
+            filter.start();
+        }
     }
 }
