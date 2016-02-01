@@ -1,11 +1,17 @@
 package framework;
 
 /**
- * @author Weinan Qiu
+ * A configuration object specifying the length of the incoming data. By default, id is 4 bytes and the rest are
+ * 8 bytes. However, this may change as data are transformed, processed or filtered. Hence, the filter will be
+ * configured with this object to prepare for the changed byte length.
+ *
  * @since 1.0.0
  */
 public class MeasurementConfig {
 
+    /**
+     * Constants for data id.
+     */
     public static final int ID_TIME = 0;
     public static final int ID_VELOCITY = 1;
     public static final int ID_ALTITUDE = 2;
@@ -13,6 +19,9 @@ public class MeasurementConfig {
     public static final int ID_TEMPERATURE = 4;
     public static final int ID_ATTITUDE = 5;
 
+    /**
+     * Length for data.
+     */
     private int idLength;
     private int timeLength;
     private int velocityLength;
@@ -21,10 +30,20 @@ public class MeasurementConfig {
     private int temperatureLength;
     private int attitudeLength;
 
+    /**
+     * Convenience method to construct a new configuration.
+     *
+     * @return a new configuration
+     */
     public static MeasurementConfig newConfig() {
         return new MeasurementConfig();
     }
 
+    /**
+     * Convenience method to construct a new configuration with default length specified.
+     *
+     * @return a new configuration containing the default length
+     */
     public static MeasurementConfig defaultConfig() {
         return newConfig()
                 .expectIdWithLength(4)
@@ -36,6 +55,12 @@ public class MeasurementConfig {
                 .expectAttitudeWithLength(8);
     }
 
+    /**
+     * Retrieve the length of the data by the corresponding id.
+     *
+     * @param id the id of the data.
+     * @return the length of the data.
+     */
     public int idForMeasurementLength(int id) {
         switch (id) {
             case ID_TIME:
