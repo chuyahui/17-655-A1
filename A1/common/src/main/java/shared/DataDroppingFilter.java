@@ -1,13 +1,13 @@
 package shared;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 
 /**
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class DataDroppingFilter extends FilterTemplate {
+public class DataDroppingFilter extends SimpleFilter {
 
     private boolean dropTime = false;
     private boolean dropVelocity = false;

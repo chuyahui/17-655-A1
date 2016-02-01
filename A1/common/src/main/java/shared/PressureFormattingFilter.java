@@ -1,6 +1,6 @@
 package shared;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 import util.ConversionUtil;
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class PressureFormattingFilter extends FilterTemplate {
+public class PressureFormattingFilter extends SimpleFilter {
 
     private String numberFormat = "#00.00000";
 

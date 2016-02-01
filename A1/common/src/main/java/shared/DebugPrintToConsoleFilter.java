@@ -1,6 +1,6 @@
 package shared;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 import util.ConversionUtil;
 
@@ -8,7 +8,7 @@ import util.ConversionUtil;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class DebugPrintToConsoleFilter extends FilterTemplate {
+public class DebugPrintToConsoleFilter extends SimpleFilter {
 
     public DebugPrintToConsoleFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);

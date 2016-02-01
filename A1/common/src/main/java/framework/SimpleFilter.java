@@ -5,7 +5,7 @@ import util.ConversionUtil;
 import java.io.ByteArrayOutputStream;
 
 /******************************************************************************************************************
-* File:FilterTemplate.java
+* File:SimpleFilter.java
 * Course: 17655
 * Project: Assignment 1
 * Copyright: Copyright (c) 2003 Carnegie Mellon University
@@ -36,14 +36,14 @@ import java.io.ByteArrayOutputStream;
 /**
  * A basic filter template can only accept 1 connection and be connected to 1 filter
  */
-public abstract class FilterTemplate extends FilterFramework
+public abstract class SimpleFilter extends FilterFramework
 {
 
 	protected final MeasurementConfig context;
 	protected String inputFilterId = null;
 	protected String outputFilterId = null;
 
-	protected FilterTemplate(final MeasurementConfig context, String filterId) {
+	protected SimpleFilter(final MeasurementConfig context, String filterId) {
 		super(filterId);
 		this.context = context;
 	}
@@ -152,4 +152,4 @@ public abstract class FilterTemplate extends FilterFramework
 
    } // run
 
-} // FilterTemplate
+} // SimpleFilter

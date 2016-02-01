@@ -18,7 +18,7 @@ package framework;
 * responsible for writing the data to a file, or device of some kind. This template assumes that the filter is a sink
 * filter that reads data from the input file and writes the output from this filter to a file or device of some kind.
 * In this case, only the input port is used by the filter. In cases where the filter is a standard filter or a source
-* filter, you should use the FilterTemplate.java or the SourceFilterTemplate.java as a starting point for creating
+* filter, you should use the SimpleFilter.java or the SourceFilterTemplate.java as a starting point for creating
 * standard or source filters.
 *
 * Parameters: 		None
@@ -89,4 +89,4 @@ public abstract class SinkFilterTemplate extends FilterFramework
 
    } // run
 
-} // FilterTemplate
+} // SimpleFilter

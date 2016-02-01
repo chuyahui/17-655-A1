@@ -1,6 +1,6 @@
 package system;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 import util.ConversionUtil;
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class AltitudeFormattingFilter extends FilterTemplate {
+public class AltitudeFormattingFilter extends SimpleFilter {
 
     private String numberFormat = "#000000.00000";
 

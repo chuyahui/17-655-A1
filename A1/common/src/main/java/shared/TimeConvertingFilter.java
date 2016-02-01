@@ -1,6 +1,6 @@
 package shared;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 import util.ConversionUtil;
 
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class TimeConvertingFilter extends FilterTemplate {
+public class TimeConvertingFilter extends SimpleFilter {
 
     private String dateFormat = "yyyy:dd:hh:mm:ss";
 

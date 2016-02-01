@@ -1,6 +1,6 @@
 package shared;
 
-import framework.FilterTemplate;
+import framework.SimpleFilter;
 import framework.MeasurementConfig;
 
 import java.io.ByteArrayOutputStream;
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class FormattingFilter extends FilterTemplate {
+public class FormattingFilter extends SimpleFilter {
 
     private static final String TAB = "\t";
     private static final String NEW_LINE = "\n";

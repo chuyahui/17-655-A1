@@ -49,7 +49,7 @@ public class PlumberTemplate
 		/*
 
 		SourceFilter Filter1 = new SourceFilter();	// This is a source filter - see SourceFilterTemplate.java
-		MiddleFilter Filter2 = new MiddleFilter();	// This is a standard filter - see FilterTemplate.java
+		MiddleFilter Filter2 = new MiddleFilter();	// This is a standard filter - see SimpleFilter.java
 		SinkFilter Filter3 = new SinkFilter();		// This is a sink filter - see SinkFilterTemplate.java
 
 		*/
