@@ -1,4 +1,4 @@
-package system;
+package shared;
 
 import framework.FilterTemplate;
 import framework.MeasurementContext;
@@ -16,8 +16,8 @@ public class DebugPrintToConsoleFilter extends FilterTemplate {
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id == MeasurementContext.ID_PRESSURE)
-            System.out.println("[" + this.getName() + "] " + ConversionUtil.convertToDouble(measurement));
+        if (id == MeasurementContext.ID_TIME)
+            System.out.println("[" + this.getName() + "] " + ConversionUtil.convertToLong(measurement));
 
         return new byte[0];
     }

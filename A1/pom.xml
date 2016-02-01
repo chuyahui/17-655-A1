@@ -13,6 +13,7 @@
         <module>common</module>
         <module>systemA</module>
         <module>systemB</module>
+        <module>systemC</module>
     </modules>
 
 

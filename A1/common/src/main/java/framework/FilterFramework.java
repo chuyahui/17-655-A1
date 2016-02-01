@@ -57,7 +57,7 @@ public abstract class FilterFramework extends Thread {
         try {
             while (InputReadPort.available() == 0) {
                 if (endOfInputForKey(key)) {
-                    throw new EndOfStreamException("End of input stream reached");
+                    throw new EndOfStreamException(key, "End of input stream reached");
                 }
                 sleep(250);
             }
@@ -86,12 +86,12 @@ public abstract class FilterFramework extends Thread {
         }
     }
 
-    private boolean endOfInputForKey(String key) {
+    protected boolean endOfInputForKey(String key) {
         FilterFramework InputFilter = inputFilterForKey(key);
         return !InputFilter.isAlive();
     }
 
-    void closeInputForKey(String key) {
+    protected void closeInputForKey(String key) {
         PipedInputStream InputReadPort = inputForKey(key);
         try {
             InputReadPort.close();
@@ -132,9 +132,23 @@ public abstract class FilterFramework extends Thread {
 
         static final long serialVersionUID = 0; // the version for streaming
 
+        private String key;
+
         EndOfStreamException () { super(); }
 
         EndOfStreamException(String s) { super(s); }
 
+        EndOfStreamException(String key, String s) {
+            super(s);
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
     }
 }
