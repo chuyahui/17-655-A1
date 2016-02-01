@@ -1,7 +1,7 @@
 package system;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import util.ConversionUtil;
 
 import java.text.DecimalFormat;
@@ -15,13 +15,13 @@ public class AltitudeFormattingFilter extends FilterTemplate {
 
     private String numberFormat = "#000000.00000";
 
-    public AltitudeFormattingFilter(String filterId, MeasurementContext context) {
+    public AltitudeFormattingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id != MeasurementContext.ID_ALTITUDE)
+        if (id != MeasurementConfig.ID_ALTITUDE)
             return measurement;
 
         double altitudeInFeet = ConversionUtil.convertToDouble(measurement);

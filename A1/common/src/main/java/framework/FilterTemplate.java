@@ -3,7 +3,6 @@ package framework;
 import util.ConversionUtil;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 
 /******************************************************************************************************************
 * File:FilterTemplate.java
@@ -40,11 +39,11 @@ import java.nio.ByteBuffer;
 public abstract class FilterTemplate extends FilterFramework
 {
 
-	protected final MeasurementContext context;
+	protected final MeasurementConfig context;
 	protected String inputFilterId = null;
 	protected String outputFilterId = null;
 
-	protected FilterTemplate(final MeasurementContext context, String filterId) {
+	protected FilterTemplate(final MeasurementConfig context, String filterId) {
 		super(filterId);
 		this.context = context;
 	}

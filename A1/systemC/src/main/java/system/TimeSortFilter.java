@@ -1,7 +1,7 @@
 package system;
 
 import framework.AggregatingFilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import util.ConversionUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +16,7 @@ public class TimeSortFilter extends AggregatingFilterTemplate {
     private DataFrame portOneCandidate;
     private DataFrame portTwoCandidate;
 
-    public TimeSortFilter(String filterId, MeasurementContext context) {
+    public TimeSortFilter(String filterId, MeasurementConfig context) {
         super(filterId, context);
     }
 
@@ -35,11 +35,11 @@ public class TimeSortFilter extends AggregatingFilterTemplate {
         if (portOneCandidate == null)
             portOneCandidate = new DataFrame();
 
-        if (id == MeasurementContext.ID_TIME)
+        if (id == MeasurementConfig.ID_TIME)
             portOneCandidate.time = measurement;
-        else if (id == MeasurementContext.ID_ALTITUDE)
+        else if (id == MeasurementConfig.ID_ALTITUDE)
             portOneCandidate.altitude = measurement;
-        else if (id == MeasurementContext.ID_PRESSURE)
+        else if (id == MeasurementConfig.ID_PRESSURE)
             portOneCandidate.pressure = measurement;
         else
             throw new RuntimeException(String.format("[one] data point with id %d should have been discarded already.", id));
@@ -50,11 +50,11 @@ public class TimeSortFilter extends AggregatingFilterTemplate {
         if (portTwoCandidate == null)
             portTwoCandidate = new DataFrame();
 
-        if (id == MeasurementContext.ID_TIME)
+        if (id == MeasurementConfig.ID_TIME)
             portTwoCandidate.time = measurement;
-        else if (id == MeasurementContext.ID_ALTITUDE)
+        else if (id == MeasurementConfig.ID_ALTITUDE)
             portTwoCandidate.altitude = measurement;
-        else if (id == MeasurementContext.ID_PRESSURE)
+        else if (id == MeasurementConfig.ID_PRESSURE)
             portTwoCandidate.pressure = measurement;
         else
             throw new RuntimeException(String.format("[two] data point with id %d should have been discarded already.", id));
@@ -98,11 +98,11 @@ public class TimeSortFilter extends AggregatingFilterTemplate {
 
         public byte[] getAllBytes() throws IOException {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_TIME));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_TIME));
             out.write(time);
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_ALTITUDE));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_ALTITUDE));
             out.write(altitude);
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_PRESSURE));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_PRESSURE));
             out.write(pressure);
             return out.toByteArray();
         }

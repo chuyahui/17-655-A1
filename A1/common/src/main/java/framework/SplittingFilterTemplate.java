@@ -14,11 +14,11 @@ import java.util.List;
  */
 public abstract class SplittingFilterTemplate extends FilterFramework {
 
-    protected final MeasurementContext context;
+    protected final MeasurementConfig context;
     protected String inputFilterId = null;
     protected List<String> outputFilterIds = new ArrayList<String>();
 
-    public SplittingFilterTemplate(String filterId, MeasurementContext context) {
+    public SplittingFilterTemplate(String filterId, MeasurementConfig context) {
         super(filterId);
         this.context = context;
     }

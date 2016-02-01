@@ -1,7 +1,7 @@
 package shared;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import util.ConversionUtil;
 
 import java.text.DecimalFormat;
@@ -15,13 +15,13 @@ public class TemperatureConvertingFilter extends FilterTemplate {
 
     private String numberFormat = "#000.00000";
 
-    public TemperatureConvertingFilter(String filterId, MeasurementContext context) {
+    public TemperatureConvertingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id != MeasurementContext.ID_TEMPERATURE) {
+        if (id != MeasurementConfig.ID_TEMPERATURE) {
             return measurement;
         }
 

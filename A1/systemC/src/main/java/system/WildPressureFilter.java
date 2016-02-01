@@ -1,6 +1,6 @@
 package system;
 
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import framework.SplittingFilterTemplate;
 import util.ConversionUtil;
 
@@ -17,7 +17,7 @@ public class WildPressureFilter extends SplittingFilterTemplate {
     private DataFrame currentFrame = null;
     private Queue<DataFrame> framesWithInvalidPressure = new LinkedList<DataFrame>();
 
-    public WildPressureFilter(String filterId, MeasurementContext context) {
+    public WildPressureFilter(String filterId, MeasurementConfig context) {
         super(filterId, context);
     }
 
@@ -27,9 +27,9 @@ public class WildPressureFilter extends SplittingFilterTemplate {
             currentFrame = new DataFrame();
 
         int id = ConversionUtil.convertToInt(idBytes);
-        if (id == MeasurementContext.ID_TIME) {
+        if (id == MeasurementConfig.ID_TIME) {
             currentFrame.time = measurement;
-        } else if (id == MeasurementContext.ID_PRESSURE) {
+        } else if (id == MeasurementConfig.ID_PRESSURE) {
             currentFrame.pressure = measurement;
         } else {
             throw new RuntimeException("Invalid id at this filter: " + id);
@@ -68,24 +68,24 @@ public class WildPressureFilter extends SplittingFilterTemplate {
     }
 
     private void sendFrameToOutputPortOne(DataFrame frame) {
-        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementContext.ID_TIME))
+        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementConfig.ID_TIME))
             WriteFilterOutputPortOne(aByte);
         for (byte aByte : frame.time)
             WriteFilterOutputPortOne(aByte);
 
-        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementContext.ID_PRESSURE))
+        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementConfig.ID_PRESSURE))
             WriteFilterOutputPortOne(aByte);
         for (byte aByte : frame.pressure)
             WriteFilterOutputPortOne(aByte);
     }
 
     private void sendFrameToOutputPortTwo(DataFrame frame) {
-        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementContext.ID_TIME))
+        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementConfig.ID_TIME))
             WriteFilterOutputPortTwo(aByte);
         for (byte aByte : frame.time)
             WriteFilterOutputPortTwo(aByte);
 
-        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementContext.ID_PRESSURE))
+        for (byte aByte : ConversionUtil.convertToByteArray(MeasurementConfig.ID_PRESSURE))
             WriteFilterOutputPortTwo(aByte);
         for (byte aByte : frame.pressure)
             WriteFilterOutputPortTwo(aByte);

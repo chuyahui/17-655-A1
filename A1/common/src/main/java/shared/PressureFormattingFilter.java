@@ -1,7 +1,7 @@
 package shared;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import util.ConversionUtil;
 
 import java.text.DecimalFormat;
@@ -15,13 +15,13 @@ public class PressureFormattingFilter extends FilterTemplate {
 
     private String numberFormat = "#00.00000";
 
-    public PressureFormattingFilter(String filterId, MeasurementContext context) {
+    public PressureFormattingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id != MeasurementContext.ID_PRESSURE)
+        if (id != MeasurementConfig.ID_PRESSURE)
             return measurement;
 
         double pressure = ConversionUtil.convertToDouble(measurement);

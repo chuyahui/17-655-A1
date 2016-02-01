@@ -1,6 +1,6 @@
 package system;
 
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import framework.SplittingFilterTemplate;
 import util.ConversionUtil;
 
@@ -17,7 +17,7 @@ public class AltitudeFilter extends SplittingFilterTemplate {
 
     private DataFrame currentFrame;
 
-    public AltitudeFilter(String filterId, MeasurementContext context) {
+    public AltitudeFilter(String filterId, MeasurementConfig context) {
         super(filterId, context);
     }
 
@@ -28,11 +28,11 @@ public class AltitudeFilter extends SplittingFilterTemplate {
         if (currentFrame == null)
             currentFrame = new DataFrame();
 
-        if (id == MeasurementContext.ID_TIME)
+        if (id == MeasurementConfig.ID_TIME)
             currentFrame.time = measurement;
-        else if (id == MeasurementContext.ID_PRESSURE)
+        else if (id == MeasurementConfig.ID_PRESSURE)
             currentFrame.pressure = measurement;
-        else if (id == MeasurementContext.ID_ALTITUDE)
+        else if (id == MeasurementConfig.ID_ALTITUDE)
             currentFrame.altitude = measurement;
         else
             throw new RuntimeException("measurement with id " + id + " should have been discarded already!");
@@ -85,11 +85,11 @@ public class AltitudeFilter extends SplittingFilterTemplate {
 
         public byte[] getAllBytes() throws IOException {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_TIME));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_TIME));
             out.write(time);
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_ALTITUDE));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_ALTITUDE));
             out.write(altitude);
-            out.write(ConversionUtil.convertToByteArray(MeasurementContext.ID_PRESSURE));
+            out.write(ConversionUtil.convertToByteArray(MeasurementConfig.ID_PRESSURE));
             out.write(pressure);
             return out.toByteArray();
         }

@@ -12,11 +12,11 @@ import java.util.List;
  */
 public abstract class AggregatingFilterTemplate extends FilterFramework {
 
-    protected final MeasurementContext context;
+    protected final MeasurementConfig context;
     protected List<String> inputFilterIds = new ArrayList<String>();
     protected String outputFilterId = null;
 
-    public AggregatingFilterTemplate(String filterId, MeasurementContext context) {
+    public AggregatingFilterTemplate(String filterId, MeasurementConfig context) {
         super(filterId);
         this.context = context;
     }

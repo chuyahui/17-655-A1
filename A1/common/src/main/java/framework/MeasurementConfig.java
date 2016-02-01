@@ -4,7 +4,7 @@ package framework;
  * @author Weinan Qiu
  * @since 1.0.0
  */
-public class MeasurementContext {
+public class MeasurementConfig {
 
     public static final int ID_TIME = 0;
     public static final int ID_VELOCITY = 1;
@@ -21,12 +21,12 @@ public class MeasurementContext {
     private int temperatureLength;
     private int attitudeLength;
 
-    public static MeasurementContext newContext() {
-        return new MeasurementContext();
+    public static MeasurementConfig newConfig() {
+        return new MeasurementConfig();
     }
 
-    public static MeasurementContext defaultContext() {
-        return newContext()
+    public static MeasurementConfig defaultConfig() {
+        return newConfig()
                 .expectIdWithLength(4)
                 .expectTimeWithLength(8)
                 .expectVelocityWithLength(8)
@@ -55,37 +55,37 @@ public class MeasurementContext {
         }
     }
 
-    public MeasurementContext expectIdWithLength(int idLength) {
+    public MeasurementConfig expectIdWithLength(int idLength) {
         this.idLength = idLength;
         return this;
     }
 
-    public MeasurementContext expectTimeWithLength(int timeLength) {
+    public MeasurementConfig expectTimeWithLength(int timeLength) {
         this.timeLength = timeLength;
         return this;
     }
 
-    public MeasurementContext expectVelocityWithLength(int velocityLength) {
+    public MeasurementConfig expectVelocityWithLength(int velocityLength) {
         this.velocityLength = velocityLength;
         return this;
     }
 
-    public MeasurementContext expectAltitudeWithLength(int altitudeLength) {
+    public MeasurementConfig expectAltitudeWithLength(int altitudeLength) {
         this.altitudeLength = altitudeLength;
         return this;
     }
 
-    public MeasurementContext expectPressureWithLength(int pressureLength) {
+    public MeasurementConfig expectPressureWithLength(int pressureLength) {
         this.pressureLength = pressureLength;
         return this;
     }
 
-    public MeasurementContext expectTemperatureWithLength(int temperatureLength) {
+    public MeasurementConfig expectTemperatureWithLength(int temperatureLength) {
         this.temperatureLength = temperatureLength;
         return this;
     }
 
-    public MeasurementContext expectAttitudeWithLength(int attitudeLength) {
+    public MeasurementConfig expectAttitudeWithLength(int attitudeLength) {
         this.attitudeLength = attitudeLength;
         return this;
     }

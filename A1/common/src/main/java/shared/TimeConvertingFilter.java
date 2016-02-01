@@ -1,7 +1,7 @@
 package shared;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import util.ConversionUtil;
 
 import java.text.SimpleDateFormat;
@@ -16,13 +16,13 @@ public class TimeConvertingFilter extends FilterTemplate {
 
     private String dateFormat = "yyyy:dd:hh:mm:ss";
 
-    public TimeConvertingFilter(String filterId, MeasurementContext context) {
+    public TimeConvertingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id != MeasurementContext.ID_TIME)
+        if (id != MeasurementConfig.ID_TIME)
             return measurement;
 
         long time = ConversionUtil.convertToLong(measurement);

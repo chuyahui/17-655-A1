@@ -1,7 +1,7 @@
 package system;
 
 import framework.FilterFramework;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 import shared.*;
 
 import java.util.Arrays;
@@ -14,23 +14,23 @@ public class SystemBPlumber {
 
     public static void main(String[] args) throws Exception {
         FilterFramework fileSourceFilter = new FileSourceFilter("0", "/Users/davidiamyou/Downloads/FlightData.dat");
-        DataDroppingFilter droppingFilter = new DataDroppingFilter("1", MeasurementContext.defaultContext());
+        DataDroppingFilter droppingFilter = new DataDroppingFilter("1", MeasurementConfig.defaultConfig());
         droppingFilter.setDropAttitude(true);
         droppingFilter.setDropVelocity(true);
 
-        PressureValidityFilter splitFilter = new PressureValidityFilter("2", MeasurementContext.defaultContext());
+        PressureValidityFilter splitFilter = new PressureValidityFilter("2", MeasurementConfig.defaultConfig());
 
-        DataDroppingFilter invalidDroppingFilter = new DataDroppingFilter("3.1", MeasurementContext.defaultContext());
+        DataDroppingFilter invalidDroppingFilter = new DataDroppingFilter("3.1", MeasurementConfig.defaultConfig());
         invalidDroppingFilter.setDropAttitude(true);
         invalidDroppingFilter.setDropVelocity(true);
         invalidDroppingFilter.setDropAltitude(true);
         invalidDroppingFilter.setDropTemperature(true);
-        TimeConvertingFilter invalidTimeConvertingFilter = new TimeConvertingFilter("4.1", MeasurementContext.defaultContext());
+        TimeConvertingFilter invalidTimeConvertingFilter = new TimeConvertingFilter("4.1", MeasurementConfig.defaultConfig());
         PressureFormattingFilter invalidPressureFormattingFilter = new PressureFormattingFilter("5.1",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16));
         FormattingFilter invalidFormattingFilter = new FormattingFilter("6.1",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16)
                         .expectPressureWithLength(9));
         invalidFormattingFilter.setTimeRequired(true);
@@ -40,21 +40,21 @@ public class SystemBPlumber {
         /********************************************************************
          * Create filters for the valid stream
          ********************************************************************/
-        TimeConvertingFilter validTimeConvertingFilter = new TimeConvertingFilter("3.2", MeasurementContext.defaultContext());
+        TimeConvertingFilter validTimeConvertingFilter = new TimeConvertingFilter("3.2", MeasurementConfig.defaultConfig());
         TemperatureConvertingFilter validTemperatureConvertingFilter = new TemperatureConvertingFilter("4.2",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16));
         AltitudeConvertingFilter validAltitudeConvertingFilter = new AltitudeConvertingFilter("5.2",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16)
                         .expectTemperatureWithLength(10));
         PressureFormattingFilter validPressureFormattingFilter = new PressureFormattingFilter("6.2",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16)
                         .expectTemperatureWithLength(10)
                         .expectAltitudeWithLength(13));
         FormattingFilter validFormattingFilter = new FormattingFilter("7.2",
-                MeasurementContext.defaultContext()
+                MeasurementConfig.defaultConfig()
                         .expectTimeWithLength(16)
                         .expectTemperatureWithLength(10)
                         .expectAltitudeWithLength(13)

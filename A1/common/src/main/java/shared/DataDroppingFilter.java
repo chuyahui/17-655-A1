@@ -1,9 +1,7 @@
 package shared;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
-
-import java.nio.ByteBuffer;
+import framework.MeasurementConfig;
 
 /**
  * @author Weinan Qiu
@@ -18,28 +16,28 @@ public class DataDroppingFilter extends FilterTemplate {
     private boolean dropTemperature = false;
     private boolean dropAttitude = false;
 
-    public DataDroppingFilter(String filterId, MeasurementContext context) {
+    public DataDroppingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id == MeasurementContext.ID_TIME)
+        if (id == MeasurementConfig.ID_TIME)
             return dropTime ? new byte[0] : measurement;
 
-        if (id == MeasurementContext.ID_VELOCITY)
+        if (id == MeasurementConfig.ID_VELOCITY)
             return dropVelocity ? new byte[0] : measurement;
 
-        if (id == MeasurementContext.ID_ALTITUDE)
+        if (id == MeasurementConfig.ID_ALTITUDE)
             return dropAltitude ? new byte[0] : measurement;
 
-        if (id == MeasurementContext.ID_PRESSURE)
+        if (id == MeasurementConfig.ID_PRESSURE)
             return dropPressure ? new byte[0] : measurement;
 
-        if (id == MeasurementContext.ID_TEMPERATURE)
+        if (id == MeasurementConfig.ID_TEMPERATURE)
             return dropTemperature ? new byte[0] : measurement;
 
-        if (id == MeasurementContext.ID_ATTITUDE)
+        if (id == MeasurementConfig.ID_ATTITUDE)
             return dropAttitude ? new byte[0] : measurement;
 
         return new byte[0];

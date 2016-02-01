@@ -1,11 +1,10 @@
 package shared;
 
 import framework.FilterTemplate;
-import framework.MeasurementContext;
+import framework.MeasurementConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -35,23 +34,23 @@ public class FormattingFilter extends FilterTemplate {
     private byte[] temperature;
     private byte[] attitude;
 
-    public FormattingFilter(String filterId, MeasurementContext context) {
+    public FormattingFilter(String filterId, MeasurementConfig context) {
         super(context, filterId);
     }
 
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
-        if (id == MeasurementContext.ID_TIME)
+        if (id == MeasurementConfig.ID_TIME)
             time = measurement;
-        else if (id == MeasurementContext.ID_VELOCITY)
+        else if (id == MeasurementConfig.ID_VELOCITY)
             velocity = measurement;
-        else if (id == MeasurementContext.ID_ALTITUDE)
+        else if (id == MeasurementConfig.ID_ALTITUDE)
             altitude = measurement;
-        else if (id == MeasurementContext.ID_PRESSURE)
+        else if (id == MeasurementConfig.ID_PRESSURE)
             pressure = measurement;
-        else if (id == MeasurementContext.ID_TEMPERATURE)
+        else if (id == MeasurementConfig.ID_TEMPERATURE)
             temperature = measurement;
-        else if (id == MeasurementContext.ID_ATTITUDE)
+        else if (id == MeasurementConfig.ID_ATTITUDE)
             attitude = measurement;
 
         formatAndFlushIfNecessary();
