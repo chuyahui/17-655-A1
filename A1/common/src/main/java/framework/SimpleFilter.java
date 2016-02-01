@@ -4,50 +4,42 @@ import util.ConversionUtil;
 
 import java.io.ByteArrayOutputStream;
 
-/******************************************************************************************************************
-* File:SimpleFilter.java
-* Course: 17655
-* Project: Assignment 1
-* Copyright: Copyright (c) 2003 Carnegie Mellon University
-* Versions:
-*	1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
-*
-* Description:
-*
-* This class serves as a template for creating filters. The details of threading, filter connections, input, and output
-* are contained in the FilterFramework super class. In order to use this template the program should rename the class.
-* The template includes the run() method which is executed when the filter is started.
-* The run() method is the guts of the filter and is where the programmer should put their filter specific code.
-* In the template there is a main read-write loop for reading from the input port of the filter and writing to the
-* output port of the filter. This template assumes that the filter is a "normal" that it both reads and writes data.
-* That is both the input and output ports are used - its input port is connected to a pipe from an up-stream filter and
-* its output port is connected to a pipe to a down-stream filter. In cases where the filter is a source or sink, you
-* should use the SourceFilterTemplate.java or SinkFilterTemplate.java as a starting point for creating source or sink
-* filters.
-*
-* Parameters: 		None
-*
-* Internal Methods:
-*
-*	public void run() - this method must be overridden by this class.
-*
-******************************************************************************************************************/
-
 /**
- * A basic filter template can only accept 1 connection and be connected to 1 filter
+ * Generic case of a filter where it reads from only one input port and writes to only one output port.
  */
-public abstract class SimpleFilter extends FilterFramework
-{
+public abstract class SimpleFilter extends FilterFramework {
 
+	/**
+	 * The configuration object containing the length information of byte data.
+	 */
 	protected final MeasurementConfig context;
+
+	/**
+	 * The id of the input filter. It is used to lookup {@link java.io.PipedInputStream} by calling {@link #inputForKey(String)}.
+	 */
 	protected String inputFilterId = null;
+
+	/**
+	 * The id of the output filter. It is used to lookup {@link java.io.PipedOutputStream} by calling {@link #outputForKey(String)}.
+	 */
 	protected String outputFilterId = null;
 
+	/**
+	 * Default constructor.
+	 *
+	 * @param context the configuration object containing the length information for byte data.
+	 * @param filterId the filter id of this filter.
+	 */
 	protected SimpleFilter(final MeasurementConfig context, String filterId) {
 		super(filterId);
 		this.context = context;
 	}
 
+	/**
+	 * Perform connection and do a integrity check to ensure it's only connected once.
+	 *
+	 * @param Filter the filter requesting connection to this filter as input
+	 */
 	@Override
 	public void connect(FilterFramework Filter) {
 		if (inputs.size() >= 1)
@@ -55,6 +47,11 @@ public abstract class SimpleFilter extends FilterFramework
 		super.connect(Filter);
 	}
 
+	/**
+	 * Register the {@link #inputFilterId} and do an integrity check.
+	 *
+	 * @param inputFilter the input filter connected
+	 */
 	@Override
 	protected void inputConnected(FilterFramework inputFilter) {
 		super.inputConnected(inputFilter);
@@ -63,6 +60,10 @@ public abstract class SimpleFilter extends FilterFramework
 		this.inputFilterId = inputFilter.filterId;
 	}
 
+	/**
+	 * Register the {@link #outputFilterId} and do an integrity check.
+	 * @param outputFilter the output filter connected
+	 */
 	@Override
 	protected void outputConnected(FilterFramework outputFilter) {
 		if (this.outputFilterId != null)
@@ -70,16 +71,43 @@ public abstract class SimpleFilter extends FilterFramework
 		this.outputFilterId = outputFilter.filterId;
 	}
 
+	/**
+	 * Template method left for subclasses to implement. Here, subclasses should transform the measurement
+	 * data and return the transformed bytes. If the subclass is not responsible for transforming a specific
+	 * measurement, it should return the measurement as is. If the subclass wishes to discard the measurement,
+	 * it should return a 0-length byte array.
+	 *
+	 * @param id the id of the measurement data
+	 * @param measurement data
+	 * @return the transformed data
+	 */
 	protected abstract byte[] doTransform(int id, byte[] measurement);
 
+	/**
+	 * Utility method to read from the {@link java.io.PipedInputStream} represented by {@link #inputFilterId}.
+	 *
+	 * @return a byte of data read from the input port
+	 * @throws EndOfStreamException
+	 */
 	protected byte ReadFilterInputPort() throws EndOfStreamException {
 		return readFromInput(inputFilterId);
 	}
 
+	/**
+	 * Utility method write to the {@link java.io.PipedOutputStream} represented by {@link #outputFilterId}.
+	 *
+	 * @param data a byte of data to be written to the output port.
+	 */
 	protected void WriteFilterOutputPort(byte data) {
 		writeToOutput(data, outputFilterId);
 	}
 
+	/**
+	 * Utility method to read id.
+	 *
+	 * @return byte array of id bytes.
+	 * @throws EndOfStreamException
+	 */
 	private byte[] readId() throws EndOfStreamException {
 		//System.out.println("[" + this.getName() + "]length to read: " + context.getIdLength());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -91,6 +119,13 @@ public abstract class SimpleFilter extends FilterFramework
 		return out.toByteArray();
 	}
 
+	/**
+	 * Utility method to read measurement.
+	 *
+	 * @param length length of the measurement to read.
+	 * @return byte array of the measurement data.
+	 * @throws EndOfStreamException
+	 */
 	private byte[] readMeasurement(int length) throws EndOfStreamException {
 		//System.out.println("[" + this.getName() + "]length to read: " + length);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -102,54 +137,39 @@ public abstract class SimpleFilter extends FilterFramework
 		return out.toByteArray();
 	}
 
-	public void run()
-    {
-		while (true)
-		{
-
-/***************************************************************
-*	The program can insert code for the filter operations
-* 	here. Note that data must be received and sent one
-* 	byte at a time. This has been done to adhere to the
-* 	pipe and filter paradigm and provide a high degree of
-* 	portabilty between filters. However, you must reconstruct
-* 	data on your own. First we read a byte from the input
-* 	stream...
-***************************************************************/
-
-			try
-			{
+	/**
+	 * Main execution method for this filter. It tries to read id and measurement from the input port and pass it
+	 * to {@link #doTransform(int, byte[])} for any transformation the subclasses provides. If the transformed bytes
+	 * has a length greater than 0, the id bytes and measurement bytes will be passed onto the output port. Otherwise,
+	 * the id and measurement is simply discarded.
+	 *
+	 * When input port goes down, it will attempt to close all ports.
+	 */
+	public void run() {
+		while (true) {
+			try {
+				// read id
 				byte[] idBytes = readId();
 				int id = ConversionUtil.convertToInt(idBytes);
-				//System.out.println("[" + this.getName() + "] id is: " + id);
+
+				// read measurement
 				byte[] measurement = readMeasurement(context.idForMeasurementLength(id));
+
+				// do transformation
 				byte[] transformedMeasurement = doTransform(id, measurement);
+
+				// pass data onto output port if length is > 0
 				if (transformedMeasurement != null && transformedMeasurement.length > 0) {
 					for (int i = 0; i < idBytes.length; i++)
 						WriteFilterOutputPort(idBytes[i]);
 					for (int i = 0; i < transformedMeasurement.length; i++) {
-						//System.out.println("[" + this.getName() + "] transformed measurement: " + transformedMeasurement[i]);
 						WriteFilterOutputPort(transformedMeasurement[i]);
 					}
-
 				}
-			} // try
-
-/***************************************************************
-*	When we reach the end of the input stream, an exception is
-* 	thrown which is shown below. At this point, you should
-* 	finish up any processing, close your ports and exit.
-***************************************************************/
-
-			catch (EndOfStreamException e)
-			{
+			} catch (EndOfStreamException e) {
 				closeAllPorts();
 				break;
-
-			} // catch
-
-		} // while
-
-   } // run
-
-} // SimpleFilter
+			}
+		}
+	}
+}
