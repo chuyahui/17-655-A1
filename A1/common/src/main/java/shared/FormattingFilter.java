@@ -19,6 +19,8 @@ public class FormattingFilter extends FilterTemplate {
     private static final String TAB = "\t";
     private static final String NEW_LINE = "\n";
 
+    private int recordsWritten = 0;
+
     private boolean timeRequired;
     private boolean velocityRequired;
     private boolean altitudeRequired;

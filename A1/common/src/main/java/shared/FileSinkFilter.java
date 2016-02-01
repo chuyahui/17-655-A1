@@ -30,8 +30,7 @@ public class FileSinkFilter extends SinkFilterTemplate {
         cache.write(dataByte);
         if ("\n".getBytes()[0] == dataByte) {
             String line = new String(cache.toByteArray(), StandardCharsets.UTF_8);
-            System.out.println(line);
-            out.println(line);
+            out.print(line);
             out.flush();
             cache.reset();
         }
