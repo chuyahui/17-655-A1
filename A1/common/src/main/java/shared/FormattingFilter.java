@@ -8,18 +8,22 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Assumes string data and formats the output data with newline.
+ * A filter that formats several incoming measurements into a single line of string. It assumes the incoming measurements
+ * are strings. It adds a tab between measurement data and also adds a new line character to the end of the line.
  *
- * @author Weinan Qiu
  * @since 1.0.0
  */
 public class FormattingFilter extends SimpleFilter {
 
+    /**
+     * Constant characters that will be used in formatting the line.
+     */
     private static final String TAB = "\t";
     private static final String NEW_LINE = "\n";
 
-    private int recordsWritten = 0;
-
+    /**
+     * Configuration options to specify what measurement to obtain and include in the line.
+     */
     private boolean timeRequired;
     private boolean velocityRequired;
     private boolean altitudeRequired;
@@ -27,6 +31,9 @@ public class FormattingFilter extends SimpleFilter {
     private boolean temperatureRequired;
     private boolean attitudeRequired;
 
+    /**
+     * Data cache for any incoming measurement. It will be cleared once we flush the formatted line out.
+     */
     private byte[] time;
     private byte[] velocity;
     private byte[] altitude;
@@ -38,8 +45,20 @@ public class FormattingFilter extends SimpleFilter {
         super(context, filterId);
     }
 
+    /**
+     * Cache the incoming measurement. When we have all the required measurement, format it and flush them to the
+     * output stream.
+     *
+     * @param id the id of the measurement data
+     * @param measurement data
+     *
+     * @return an empty byte array since we will deliberately take control when to flush data, hence we don't need
+     * the super class to do anything for us.
+     */
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
+
+        // cache data
         if (id == MeasurementConfig.ID_TIME)
             time = measurement;
         else if (id == MeasurementConfig.ID_VELOCITY)
@@ -53,13 +72,22 @@ public class FormattingFilter extends SimpleFilter {
         else if (id == MeasurementConfig.ID_ATTITUDE)
             attitude = measurement;
 
+        // format and flush if we have all required data
         formatAndFlushIfNecessary();
+
+        // return nothing since we don't need super class to flush anything for us.
         return new byte[0];
     }
 
+    /**
+     * In the order of "time velocity temperature altitude pressure attitude", put a tab
+     * between the required measurements and add a new line at the end. Write all the formatted
+     * bytes to the output and clear the cache.
+     */
     private void formatAndFlushIfNecessary() {
         if (hasCachedAllRequiredItems()) {
             try {
+                // do format
                 ByteArrayOutputStream buffer = new ByteArrayOutputStream();
                 if (timeRequired) {
                     buffer.write(trimBytes(time));
@@ -87,20 +115,34 @@ public class FormattingFilter extends SimpleFilter {
                 }
                 buffer.write(NEW_LINE.getBytes());
 
+                // write output
                 for (byte eachByte : buffer.toByteArray())
                     WriteFilterOutputPort(eachByte);
             } catch (IOException ex) {
                 throw new RuntimeException("Something went wrong: " + ex.getMessage());
             } finally {
+                // reset cache
                 resetCache();
             }
         }
     }
 
+    /**
+     * We need to trim the bytes since the byte array may have been padded in the previous filters. If we
+     * directly write them out, we could see a little square at where should have been a plus sign.
+     *
+     * @param bytes the byte array to be converted to string and trimmed for any unrecognized characters.
+     * @return the trimmed version of the byte array data
+     */
     private byte[] trimBytes(byte[] bytes) {
         return new String(bytes, StandardCharsets.UTF_8).trim().getBytes(StandardCharsets.UTF_8);
     }
 
+    /**
+     * Test if we have gathered all required data measurements in a line.
+     *
+     * @return
+     */
     private boolean hasCachedAllRequiredItems() {
         boolean timeCheck = true, velocityCheck = true, altitudeCheck = true, pressureCheck = true,
                 temperatureCheck = true, attitudeCheck = true;
@@ -120,6 +162,9 @@ public class FormattingFilter extends SimpleFilter {
         return timeCheck && velocityCheck && altitudeCheck && pressureCheck && temperatureCheck && attitudeCheck;
     }
 
+    /**
+     * Reset the cache to prepare for another line.
+     */
     private void resetCache() {
         this.time = null;
         this.velocity = null;
