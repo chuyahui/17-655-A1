@@ -3,7 +3,8 @@ package util;
 import java.nio.ByteBuffer;
 
 /**
- * @author Weinan Qiu
+ * Data type conversion utility.
+ *
  * @since 1.0.0
  */
 public class ConversionUtil {
