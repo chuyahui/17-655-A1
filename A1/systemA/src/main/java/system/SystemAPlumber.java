@@ -11,6 +11,11 @@ import shared.*;
  */
 public class SystemAPlumber {
 
+    private static String getBaseFolder(String[] args) {
+        assert args.length > 0;
+        return args[0];
+    }
+
     public static void main(String[] args) throws Exception {
 
         /**================================================================================
@@ -27,7 +32,7 @@ public class SystemAPlumber {
          * ================================================================================
          */
         // 0 - FileSourceFilter
-        FilterFramework fileSourceFilter = new FileSourceFilter("0", "/Users/davidiamyou/Downloads/FlightData.dat");
+        FilterFramework fileSourceFilter = new FileSourceFilter("0", getBaseFolder(args) + "/FlightData.dat");
 
         // 1 - DataDroppingFilter
         DataDroppingFilter droppingFilter = new DataDroppingFilter("1", MeasurementConfig.defaultConfig());
@@ -62,7 +67,7 @@ public class SystemAPlumber {
         formattingFilter.setTemperatureRequired(true);
 
         // 6 - FileSinkFilter
-        FilterFramework fileSinkFilter = new FileSinkFilter("6", "/Users/davidiamyou/Downloads/OutputA.dat");
+        FilterFramework fileSinkFilter = new FileSinkFilter("6", getBaseFolder(args) + "/OutputA.dat");
 
         /**==================================================================
          * Section B: connect filters

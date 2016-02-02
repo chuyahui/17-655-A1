@@ -12,6 +12,11 @@ import java.util.Arrays;
  */
 public class SystemCPlumber {
 
+    private static String getBaseFolder(String[] args) {
+        assert args.length > 0;
+        return args[0];
+    }
+
     public static void main(String[] args) throws Exception {
 
         /**===============================================================================
@@ -39,7 +44,7 @@ public class SystemCPlumber {
          */
 
         // 1 - FileSourceFilter
-        FileSourceFilter fileSourceA = new FileSourceFilter("1", "/Users/davidiamyou/Downloads/SubSetA.dat");
+        FileSourceFilter fileSourceA = new FileSourceFilter("1", getBaseFolder(args) + "/SubSetA.dat");
 
         // 2 - DataDroppingFilter
         DataDroppingFilter streamADrop = new DataDroppingFilter("2", MeasurementConfig.defaultConfig());
@@ -48,7 +53,7 @@ public class SystemCPlumber {
         streamADrop.setDropVelocity(true);
 
         // 3  - FileSourceFilter
-        FileSourceFilter fileSourceB = new FileSourceFilter("3", "/Users/davidiamyou/Downloads/SubSetB.dat");
+        FileSourceFilter fileSourceB = new FileSourceFilter("3", getBaseFolder(args) + "/SubSetB.dat");
 
         // 4 - DataDroppingFilter
         DataDroppingFilter streamBDrop = new DataDroppingFilter("4", MeasurementConfig.defaultConfig());
@@ -80,7 +85,7 @@ public class SystemCPlumber {
         formattingFilter1.setAltitudeRequired(true);
 
         // 11 - FileSinkFilter
-        FileSinkFilter lessThan10KSink = new FileSinkFilter("11", "/Users/davidiamyou/Downloads/LessThan10K.dat");
+        FileSinkFilter lessThan10KSink = new FileSinkFilter("11", getBaseFolder(args) + "/LessThan10K.dat");
 
         // 12 - DataDroppingFilter
         DataDroppingFilter dropAltitudeFilter = new DataDroppingFilter("12", MeasurementConfig.defaultConfig());
@@ -106,7 +111,7 @@ public class SystemCPlumber {
         formattingFilter2.setPressureRequired(true);
 
         // 18 - FileSinkFilter
-        FileSinkFilter pressureWildPointsSink = new FileSinkFilter("18", "/Users/davidiamyou/Downloads/PressureWildPoints.dat");
+        FileSinkFilter pressureWildPointsSink = new FileSinkFilter("18", getBaseFolder(args) + "/PressureWildPoints.dat");
 
 
         /**===================================================================

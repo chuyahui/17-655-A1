@@ -13,6 +13,11 @@ import java.util.Arrays;
  */
 public class SystemBPlumber {
 
+    private static String getBaseFolder(String[] args) {
+        assert args.length > 0;
+        return args[0];
+    }
+
     public static void main(String[] args) throws Exception {
 
         /**=========================================================================================================
@@ -37,7 +42,7 @@ public class SystemBPlumber {
          */
 
         // 0 - FileSourceFilter
-        FilterFramework fileSourceFilter = new FileSourceFilter("0", "/Users/davidiamyou/Downloads/FlightData.dat");
+        FilterFramework fileSourceFilter = new FileSourceFilter("0", getBaseFolder(args) + "/FlightData.dat");
 
         // 1 - DataDroppingFilter
         DataDroppingFilter droppingFilter = new DataDroppingFilter("1", MeasurementConfig.defaultConfig());
@@ -71,7 +76,7 @@ public class SystemBPlumber {
         invalidFormattingFilter.setPressureRequired(true);
 
         // 7.1 - FileSinkFilter (wild stream)
-        FileSinkFilter invalidFileSink = new FileSinkFilter("7.1", "/Users/davidiamyou/Downloads/WildPoints.dat");
+        FileSinkFilter invalidFileSink = new FileSinkFilter("7.1", getBaseFolder(args) + "/WildPoints.dat");
 
         // 3.2 - TimeConvertingFilter (valid stream)
         TimeConvertingFilter validTimeConvertingFilter = new TimeConvertingFilter("3.2", MeasurementConfig.defaultConfig());
@@ -107,7 +112,7 @@ public class SystemBPlumber {
         validFormattingFilter.setPressureRequired(true);
 
         // 8.2 - FileSinkFilter (valid stream)
-        FileSinkFilter validFileSink = new FileSinkFilter("8.2", "/Users/davidiamyou/Downloads/OutputB.dat");
+        FileSinkFilter validFileSink = new FileSinkFilter("8.2", getBaseFolder(args) + "/OutputB.dat");
 
         /**==================================================================
          * Section B: Connect the filters
