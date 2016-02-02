@@ -51,7 +51,10 @@ public class FileSinkFilter extends SinkFilterTemplate {
      */
     @Override
     protected void writeByteToSink(byte dataByte) {
+        // cache data first
         cache.write(dataByte);
+
+        // write the entire line to file if the last byte is a new line character
         if ("\n".getBytes()[0] == dataByte) {
             String line = new String(cache.toByteArray(), StandardCharsets.UTF_8);
             out.print(line);
