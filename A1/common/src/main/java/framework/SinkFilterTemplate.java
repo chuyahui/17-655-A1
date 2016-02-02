@@ -1,92 +1,65 @@
 package framework;
 
-/******************************************************************************************************************
-* File:SinkFilterTemplate.java
-* Course: 17655
-* Project: Assignment 1
-* Copyright: Copyright (c) 2003 Carnegie Mellon University
-* Versions:
-*	1.0 November 2008 - Initial rewrite of original assignment 1 (ajl).
-*
-* Description:
-*
-* This class serves as a template for creating sink filters. The details of threading, connections writing output
-* are contained in the FilterFramework super class. In order to use this template the program should rename the class.
-* The template includes the run() method which is executed when the filter is started.
-* The run() method is the guts of the filter and is where the programmer should put their filter specific code.
-* In the template there is a main read-write loop for reading from the input port of the filter. The programmer is
-* responsible for writing the data to a file, or device of some kind. This template assumes that the filter is a sink
-* filter that reads data from the input file and writes the output from this filter to a file or device of some kind.
-* In this case, only the input port is used by the filter. In cases where the filter is a standard filter or a source
-* filter, you should use the SimpleFilter.java or the SourceFilterTemplate.java as a starting point for creating
-* standard or source filters.
-*
-* Parameters: 		None
-*
-* Internal Methods:
-*
-*	public void run() - this method must be overridden by this class.
-*
-******************************************************************************************************************/
+/**
+ * This class represents the sink, a special kind of filter which writes to an external resource. It provides basic
+ * functionality to read from the input pipe and leave the write function to its implementations.
+ *
+ * @since 1.0.0
+ */
+public abstract class SinkFilterTemplate extends FilterFramework {
 
-public abstract class SinkFilterTemplate extends FilterFramework
-{
-
+	/**
+	 * The filter id for the input pipe, used to lookup the {@link java.io.PipedInputStream} from the input registry.
+	 */
 	private String inputKey;
 
+	/**
+	 * Template method for the subclasses to implement. Subclasses should decide how to write the data to the external
+	 * resource.
+	 *
+	 * @param dataByte the data to be written to external resource.
+	 */
 	protected abstract void writeByteToSink(byte dataByte);
 
+	/**
+	 * Default constructor
+	 *
+	 * @param filterId
+	 */
 	public SinkFilterTemplate(String filterId) {
 		super(filterId);
 	}
 
+	/**
+	 * Register the input filter id.
+	 *
+	 * @param inputFilter the input filter connected
+	 */
 	@Override
 	protected void inputConnected(FilterFramework inputFilter) {
 		super.inputConnected(inputFilter);
 		this.inputKey = inputFilter.filterId;
 	}
 
-	public void run()
-    {
+	/**
+	 * Main execution method for the sink. It reads a byte of data from the input and let the subclasses decide
+	 * how to write it to the external resource.
+	 */
+	public void run() {
 		byte databyte = 0;
 
-/*************************************************************
-*	This is the main processing loop for the filter. Since this
-*   is a sink filter, we read until there is no more data
-* 	available on the input port.
-**************************************************************/
-
-		while (true)
-		{
-			try
-			{
-/*************************************************************
-*	Here we read a byte from the input port. Note that
-* 	regardless how the data is written, data must be read one
-*	byte at a time from the input pipe. This has been done
-* 	to adhere to the pipe and filter paradigm and provide a
-*	high degree of portabilty between filters. However, you
-* 	must convert output data as needed on your own.
-**************************************************************/
+		while (true) {
+			try {
+				// read data
 				databyte = readFromInput(inputKey);
+
+				// write data
 				writeByteToSink(databyte);
-			} // try
-
-/***************************************************************
-*	When we reach the end of the input stream, an exception is
-* 	thrown which is shown below. At this point, you should
-* 	finish up any processing, close your ports and exit.
-***************************************************************/
-
-			catch (EndOfStreamException e)
-			{
+			} catch (EndOfStreamException e) {
+				// close ports if there's no more input data
 				closeAllPorts();
 				break;
-
-			} // catch
-
-		} // while
-
-   } // run
-
-} // SimpleFilter
+			}
+		}
+   	}
+}
