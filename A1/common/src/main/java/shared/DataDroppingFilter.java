@@ -4,11 +4,16 @@ import framework.SimpleFilter;
 import framework.MeasurementConfig;
 
 /**
- * @author Weinan Qiu
+ * A filter that discards certain measurement to boost performance. Some measurements are not needed in the trailing
+ * filters. They should be dropped that the following filters don't have to waste time parse them and pass them on.
+ *
  * @since 1.0.0
  */
 public class DataDroppingFilter extends SimpleFilter {
 
+    /**
+     * Configuration options on whether a certain measurement should be dropped.
+     */
     private boolean dropTime = false;
     private boolean dropVelocity = false;
     private boolean dropAltitude = false;
@@ -20,6 +25,14 @@ public class DataDroppingFilter extends SimpleFilter {
         super(context, filterId);
     }
 
+    /**
+     * A a certain measurement is configured to be dropped, return a empty byte array so {@link SimpleFilter} will
+     * not pass it on. Otherwise, return the data as is so {@link SimpleFilter} passes it on.
+     *
+     * @param id the id of the measurement data
+     * @param measurement data
+     * @return
+     */
     @Override
     protected byte[] doTransform(int id, byte[] measurement) {
         if (id == MeasurementConfig.ID_TIME)
