@@ -8,7 +8,10 @@
 .mtj.tmp/
 
 # Package Files #
-# *.jar
+*.jar
+!A1/distribution/systemA.jar
+!A1/distribution/systemB.jar
+!A1/distribution/systemC.jar
 *.war
 *.ear
 
@@ -65,31 +68,3 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-
-A1/common/target/common-1.0.jar
-A1/distribution/jre/osx/Contents/Home/lib/charsets.jar
-A1/distribution/jre/osx/Contents/Home/lib/jce.jar
-A1/distribution/jre/osx/Contents/Home/lib/jfr.jar
-A1/distribution/jre/osx/Contents/Home/lib/jfxswt.jar
-A1/distribution/jre/osx/Contents/Home/lib/jsse.jar
-A1/distribution/jre/osx/Contents/Home/lib/management-agent.jar
-A1/distribution/jre/osx/Contents/Home/lib/resources.jar
-A1/distribution/jre/osx/Contents/Home/lib/rt.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/cldrdata.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/dnsns.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/jaccess.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/jfxrt.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/localedata.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/nashorn.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/sunec.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/sunjce_provider.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/sunpkcs11.jar
-A1/distribution/jre/osx/Contents/Home/lib/ext/zipfs.jar
-A1/distribution/jre/osx/Contents/Home/lib/security/local_policy.jar
-A1/distribution/jre/osx/Contents/Home/lib/security/US_export_policy.jar
-A1/systemA/target/systemA-1.0-jar-with-dependencies.jar
-A1/systemA/target/systemA-1.0.jar
-A1/systemB/target/systemB-1.0-jar-with-dependencies.jar
-A1/systemB/target/systemB-1.0.jar
-A1/systemC/target/systemC-1.0-jar-with-dependencies.jar
-A1/systemC/target/systemC-1.0.jar

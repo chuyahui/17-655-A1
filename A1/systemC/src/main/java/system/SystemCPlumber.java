@@ -13,7 +13,10 @@ import java.util.Arrays;
 public class SystemCPlumber {
 
     private static String getBaseFolder(String[] args) {
-        assert args.length > 0;
+        if (args.length <= 0) {
+            System.out.println("Please provide the absolute execution folder path as the first argument");
+            System.exit(-1);
+        }
         return args[0];
     }
 
