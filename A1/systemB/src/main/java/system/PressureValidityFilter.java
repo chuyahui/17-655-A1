@@ -23,6 +23,7 @@ import java.util.Queue;
  */
 public class PressureValidityFilter extends SplittingFilterTemplate {
 
+
     /**
      * Cache for the last valid frame of data.
      */
@@ -74,6 +75,9 @@ public class PressureValidityFilter extends SplittingFilterTemplate {
         if (!currentFrame.hasCollectedAll())
             return;
 
+//        receivedCount++;
+//        System.out.println("[" + this.getName() + "] " + receivedCount);
+
         // get pressure data and test if it is valid
         double currentPressure = ConversionUtil.convertToDouble(currentFrame.pressure);
         boolean currentPressureValid = isPressureValid(currentPressure);
@@ -84,6 +88,7 @@ public class PressureValidityFilter extends SplittingFilterTemplate {
         if (!currentPressureValid) {
             framesWithInvalidPressure.add(currentFrame);
             sendFrameToOutputPortOne(currentFrame);
+            currentFrame = null;
             return;
         }
 
@@ -94,6 +99,7 @@ public class PressureValidityFilter extends SplittingFilterTemplate {
         while (framesWithInvalidPressure.size() > 0) {
             DataFrame correctedFrame = framesWithInvalidPressure.poll();
             correctedFrame.pressure = extrapolatePressure(currentPressure, true);
+            correctedFrame.pressure = toNegative(correctedFrame.pressure);
             sendFrameToOutputPortTwo(correctedFrame);
         }
 
@@ -115,6 +121,7 @@ public class PressureValidityFilter extends SplittingFilterTemplate {
         while (framesWithInvalidPressure.size() > 0) {
             DataFrame correctedFrame = framesWithInvalidPressure.poll();
             correctedFrame.pressure = extrapolatePressure(null, false);
+            correctedFrame.pressure = toNegative(correctedFrame.pressure);
             sendFrameToOutputPortTwo(correctedFrame);
         }
     }
@@ -220,6 +227,11 @@ public class PressureValidityFilter extends SplittingFilterTemplate {
             throw new IllegalStateException("Impossible state");
 
         return ConversionUtil.convertToByteArray(value);
+    }
+
+    private byte[] toNegative(byte[] doubleBytes) {
+        double value = ConversionUtil.convertToDouble(doubleBytes);
+        return ConversionUtil.convertToByteArray(0.0d - Math.abs(value));
     }
 
     /**

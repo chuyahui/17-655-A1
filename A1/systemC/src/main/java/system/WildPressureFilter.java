@@ -69,6 +69,7 @@ public class WildPressureFilter extends SplittingFilterTemplate {
         boolean currentPressureValid = isPressureValid(currentPressure);
         if (!currentPressureValid) {
             framesWithInvalidPressure.add(currentFrame);
+            currentFrame = null;
             return;
         }
 

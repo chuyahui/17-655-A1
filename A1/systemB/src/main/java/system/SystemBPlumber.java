@@ -101,6 +101,7 @@ public class SystemBPlumber {
                         .expectTimeWithLength(16)
                         .expectTemperatureWithLength(10)
                         .expectAltitudeWithLength(13));
+        validPressureFormattingFilter.setTreatNegativeValueAsExtrapolated(true);
 
         // 7.2 - FormattingFilter (valid stream)
         FormattingFilter validFormattingFilter = new FormattingFilter("7.2",
