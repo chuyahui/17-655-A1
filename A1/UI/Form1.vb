@@ -1,59 +1,78 @@
 ﻿Imports System.IO
 
+''' <summary>
+''' This is the UI for A1.
+''' </summary>
+''' <remarks></remarks>
+
 Public Class Form1
+    ''' Create a new MyUtilities class
     Private myUtil As New MyUtilities
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Default_Value(FindCurrentFolder)
+    End Sub
+
+    ''The default value for data and java location is the distribution folder
     Private Sub Default_Value(ByVal DistriubtionFolderPath As String)
-        txtSysA.Text = "java -jar SystemA.jar " & DistriubtionFolderPath
-        txtSysB.Text = "java -jar SystemB.jar " & DistriubtionFolderPath
-        txtSysC.Text = "java -jar SystemC.jar " & DistriubtionFolderPath
         txtDataLocation.Text = DistriubtionFolderPath
     End Sub
+    ''Run SyStem A
     Private Sub btSystemA_Click(sender As Object, e As EventArgs) Handles btSystemA.Click
-        Static start_time As DateTime
-        Static stop_time As DateTime
-        Dim elapsed_time As TimeSpan
-
-        start_time = Now
-        myUtil.runSystem("SystemA.jar", txtDataLocation.Text)
-        stop_time = Now
-        elapsed_time = stop_time.Subtract(start_time)
-        ResultBlock.Text = "SystemA Time(Seconds):" & elapsed_time.TotalSeconds.ToString("0.000000")
+        ''Run System A
+        RunSystem("SystemA")
+        ''Write the result in the result box
+        Call Open_OutPutA()
     End Sub
 
+    ''Run System B 
     Private Sub BtSystemB_Click(sender As Object, e As EventArgs) Handles BtSystemB.Click
-        Static start_time As DateTime
-        Static stop_time As DateTime
-        Dim elapsed_time As TimeSpan
-        start_time = Now
-        myUtil.runSystem("SystemB.jar", txtDataLocation.Text)
-        stop_time = Now
-        elapsed_time = stop_time.Subtract(start_time)
-        ResultBlock.Text = "SystemB Time (Seconds): " & elapsed_time.TotalSeconds.ToString("0.000000")
+        ''Run System B
+        RunSystem("SystemB")
+        ''Write the result in the result box
+        Call Open_OutPutB()
     End Sub
-
+    ''Run System C
     Private Sub BtSystemC_Click(sender As Object, e As EventArgs) Handles BtSystemC.Click
-        Static start_time As DateTime
-        Static stop_time As DateTime
-        Dim elapsed_time As TimeSpan
-        start_time = Now
-        myUtil.runSystem("SystemC.jar", txtDataLocation.Text)
-        stop_time = Now
-        elapsed_time = stop_time.Subtract(start_time)
-        ResultBlock.Text = "SystemC Time(Seconds):" & elapsed_time.TotalSeconds.ToString("0.000000")
+        ''Run System C
+        RunSystem("SystemC")
+        ''Write the result in the result box
+        Call Open_OutPutCLess_Than10K()
+        Call Open_OutPutCWildPoints()
     End Sub
-
+    Private Sub RunSystem(ByVal System_Name As String)
+        Try
+            ''Clean Result
+            ResultBlock.Clear()
+            ''Create value to hold time value
+            Static start_time As DateTime
+            Static stop_time As DateTime
+            Dim elapsed_time As TimeSpan
+            ''Time start
+            start_time = Now
+            ''Run system A
+            myUtil.runSystem(System_Name & ".jar", txtDataLocation.Text)
+            ''Time Stop
+            stop_time = Now
+            ''Calc elapsed Time
+            elapsed_time = stop_time.Subtract(start_time)
+            ''Display elapsed Time in the status text box
+            txtStatus.Text = System_Name & " Time(Seconds):" & elapsed_time.TotalSeconds.ToString("0.000000")
+        Catch ex As Exception
+            txtStatus.Text = "Unable to run " & System_Name
+        End Try
+    End Sub
+    ''FindCurrentFolder
     Private Function FindCurrentFolder() As String
         Dim path As String = Directory.GetCurrentDirectory()
         Return path
     End Function
-
+    ''FindParentFolder
     Private Function FindParentFolder() As String
         Dim path As String = Directory.GetCurrentDirectory()
         Dim parentPath As String = GetParent(path)
         Return parentPath
     End Function
-
-
+    ''GetParent
     Private Function GetParent(ByVal path As String) As String
         Try
             Dim directoryInfo As System.IO.DirectoryInfo
@@ -69,52 +88,39 @@ Public Class Form1
             Return "Nothing"
         End Try
     End Function
-
-
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Default_Value(FindCurrentFolder)
-    End Sub
-
-    Private Sub btOpenA_Click(sender As Object, e As EventArgs) Handles btOpenA.Click
-        ResultBlock.Text = "Time:                      Temperature (C):       Altitude (m):" & vbNewLine
+    ''Open_OutPutA & add header
+    Private Sub Open_OutPutA()
+        ResultBlock.Text = ResultBlock.Text & vbNewLine
+        ResultBlock.Text = ResultBlock.Text & "Time:                      Temperature (C):       Altitude (m):" & vbNewLine
         ResultBlock.Text = ResultBlock.Text & myUtil.readFile(txtDataLocation.Text & "\OutputA.dat")
     End Sub
-
-    Private Sub btOpenB_Click(sender As Object, e As EventArgs) Handles btOpenB.Click
-        ResultBlock.Text = "Time:                      Temperature (C):       Altitude (m):              Pressure (psi):" & vbNewLine
+    ''Open_OutPutB & add header
+    Private Sub Open_OutPutB()
+        ResultBlock.Text = ResultBlock.Text & vbNewLine
+        ResultBlock.Text = ResultBlock.Text & "Time:                      Temperature (C):       Altitude (m):              Pressure (psi):" & vbNewLine
         ResultBlock.Text = ResultBlock.Text & myUtil.readFile(txtDataLocation.Text & "\OutputB.dat")
     End Sub
-    Private Sub btOpenC_Click(sender As Object, e As EventArgs) Handles btOpenC.Click
-        ResultBlock.Text = "Time:                      Altitude (m):" & vbNewLine
+    ''Open_OutPutC Less_Then10K & add header
+    Private Sub Open_OutPutCLess_Than10K()
+        ResultBlock.Text = ResultBlock.Text & vbNewLine
+        ResultBlock.Text = ResultBlock.Text & "Time:                      Altitude (m):" & vbNewLine
         ResultBlock.Text = ResultBlock.Text & myUtil.readFile(txtDataLocation.Text & "\LessThan10K.dat")
     End Sub
-    Private Sub btOpenC_Wild_Click(sender As Object, e As EventArgs) Handles btOpenC_Wild.Click
-        ResultBlock.Text = "Time:                      Pressure (psi):" & vbNewLine
+    ''Open_OutPutC wild Points & add header
+    Private Sub Open_OutPutCWildPoints()
+        ResultBlock.Text = ResultBlock.Text & vbNewLine
+        ResultBlock.Text = ResultBlock.Text & "Time:                      Pressure (psi):" & vbNewLine
         ResultBlock.Text = ResultBlock.Text & myUtil.readFile(txtDataLocation.Text & "\PressureWildPoints.dat")
     End Sub
-
-
-    Private Sub txtDataLocation_TextChanged(sender As Object, e As EventArgs) Handles txtDataLocation.TextChanged
-        Default_Value(txtDataLocation.Text)
-    End Sub
-
+    ''Clean Result
     Private Sub btClean_Click(sender As Object, e As EventArgs) Handles btClean.Click
         ResultBlock.Clear()
     End Sub
-    Private Sub btOpenFlightData_Click(sender As Object, e As EventArgs) Handles btOpenFlightData.Click
-        ResultBlock.Text = myUtil.readFile(txtDataLocation.Text & "\SourceFile\FlightData_Orig.txt")
-    End Sub
-
-    Private Sub btOpenSubA_Click(sender As Object, e As EventArgs) Handles btOpenSubA.Click
-        ResultBlock.Text = myUtil.readFile(txtDataLocation.Text & "\SourceFile\SubSetA_Orig.txt")
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        ResultBlock.Text = myUtil.readFile(txtDataLocation.Text & "\SourceFile\SubSetB_Orig.txt")
-    End Sub
 End Class
 
+''Utilities class 
 Public Class MyUtilities
+    ''Run Single RunCommand
     Public Sub RunCommandCom(command As String, arguments As String, permanent As Boolean)
         Dim p As Process = New Process()
         Dim pi As ProcessStartInfo = New ProcessStartInfo()
@@ -123,14 +129,14 @@ Public Class MyUtilities
         p.StartInfo = pi
         p.Start()
     End Sub
-
+    ''Read Hex
     Public Function ReadHex(ByVal FILE_NAME As String) As String
         Dim bytes As Byte() = IO.File.ReadAllBytes(FILE_NAME)
         Dim hex As String() = Array.ConvertAll(bytes, Function(b) b.ToString("X2"))
 
         Return String.Join(" ", hex)
     End Function
-
+    ''Read File using streamReader
     Public Function readFile(ByVal FILE_NAME As String) As String
         Dim line As String = ""
         Try
@@ -149,6 +155,7 @@ Public Class MyUtilities
         End Try
         Return line
     End Function
+    ''Run Java file
     Public Sub runSystem(ByVal System As String, ByVal DistributionLocation As String)
         Using p1 As New Process
             p1.StartInfo.FileName = "cmd.exe"
@@ -161,7 +168,7 @@ Public Class MyUtilities
             p1.WaitForExit()
         End Using
     End Sub
-
+    ''Open File 
     Public Sub OpenFile(ByVal FILE_NAME As String)
         If System.IO.File.Exists(FILE_NAME) = True Then
             Process.Start(FILE_NAME)
