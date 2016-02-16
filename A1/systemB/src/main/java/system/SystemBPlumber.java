@@ -23,6 +23,8 @@ public class SystemBPlumber {
 
     public static void main(String[] args) throws Exception {
 
+        System.out.println("System B running...");
+
         /**=========================================================================================================
          * Section A: Create filters
          *

@@ -22,6 +22,8 @@ public class SystemCPlumber {
 
     public static void main(String[] args) throws Exception {
 
+        System.out.println("System C running...");
+
         /**===============================================================================
          * Section A: Create filters
          * The filters to be created are as follows (They are indexed by their filter id):
