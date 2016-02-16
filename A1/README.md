@@ -8,7 +8,7 @@ _In short_
 
 On Windows(x64):
 ```
-TBD
+Double click the A1UI.exe inside the distribution folder
 ```
 
 On OS X:
@@ -28,7 +28,9 @@ In addition, to avoid run time issues, the `distribution` folder also contains J
 Assuming `$P` is the file path to the distribution folder.
 To run the system manually on Windows (x64):
 ```
-TBD
+distribution/jre/Windows/bin/java.exe -jar distribution/systemA.jar $P
+distribution/jre/Windows/bin/java.exe -jar distribution/systemB.jar $P
+distribution/jre/Windows/bin/java.exe -jar distribution/systemC.jar $P
 ```
 
 To run the system manually on Mac OS X:
