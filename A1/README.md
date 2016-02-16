@@ -8,7 +8,7 @@ _In short_
 
 On Windows(x64):
 ```
-Double click the A1UI.exe inside the distribution folder
+Unzip the zip file, then double click the A1UI.exe inside the distribution folder
 ```
 
 On OS X:
